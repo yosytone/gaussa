@@ -102,12 +102,12 @@ int main()
 	}
 
 	//выведение f и f* , x и x*
-	for (i = 1; i <= n; i++)
-		cout << "f[" << i << "]= " << f[i] << '\t' << "f*[" << i << "]= " << f_result[i] << endl;
+	//for (i = 1; i <= n; i++)
+	//	cout << "f[" << i << "]= " << f[i] << '\t' << "f*[" << i << "]= " << f_result[i] << endl;
 
-	cout << endl << "Решения системы:" << endl;
-	for (i = 1; i <= n; i++)
-		cout << "x[" << i << "]= " << x_solution[i] << '\t' << "x*[" << i << "]=" << x[i] << endl;
+	//cout << endl << "Решения системы:" << endl;
+	//for (i = 1; i <= n; i++)
+	//	cout << "x[" << i << "] = " << x_solution[i] << '\t' << "x*[" << i << "] = " << x[i] << endl;
 
 	//x и x*
 	for (i = 1; i <= n; i++) {
@@ -117,7 +117,18 @@ int main()
 		}
 	}
 
-	cout << endl  << "Biggest \"x\" error:\t" << delta_x << endl;
+
+	for (i = 1; i <= n; i++) {
+		
+			delta_x = x_solution[i] - x[i];
+			number_delta_x = i;
+			cout << delta_x << endl;
+	
+	}
+
+
+
+	cout << endl  << "max error: " << delta_x << endl;
 	return 0;
 
 }
