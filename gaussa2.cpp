@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include <iostream>
 #include <time.h>  
 #include <windows.h>
@@ -28,8 +27,8 @@ int main()
 	cin >> n;
 
 	int N = n + 1;
-	double** A = new double*[N];
-	double** A_transposed = new double*[N];
+	double** A = new double* [N];
+	double** A_transposed = new double* [N];
 	double* f = new double[N];
 	double* f_result = new double[N];
 	double* x = new double[N];
@@ -62,48 +61,54 @@ int main()
 	}
 
 	///////////////////////////////////////////////////
-	
+
+
 
 	double max_el = 0;
 	int index_max_el = 0;
+	int w = 1;
 
 
+	while (w <= n) {
 
-		for (i = 1; i <= n; i++) {
-			if (A[i][1] > max_el) {
-				max_el = A[i][1];
+		max_el = 0;
+		index_max_el = 0;
+
+		for (i = w; i <= n; i++) {
+			if (A[i][w] > max_el) {
+				max_el = A[i][w];
 				index_max_el = i;
 
 			}
 		}
 
-	
-
-	cout << "max = " << max_el << " " << index_max_el << endl;
 
 
+		cout << "max = " << max_el << " " << index_max_el << endl;
 
-	double zam = 0;
 
-		for (j = 1; j <= n; j++) {
-			zam = A[1][j];
-			A[1][j] = A[index_max_el][j];
+
+		double zam = 0;
+
+		for (j = w; j <= n; j++) {
+			zam = A[w][j];
+			A[w][j] = A[index_max_el][j];
 			A[index_max_el][j] = zam;
 		}
 
+		w++;
 
-
-
-		for (int i = 1; i <= n; ++i)
-		{
-			for (int j = 1; j <= n; ++j)
-				std::cout << std::setw(4) << A[i][j];
-			std::cout << std::endl;
-		}
-
+	}
 
 
 	///////////////////////////////////////////////////////
+
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+			std::cout << std::setw(4) << A[i][j];
+		std::cout << std::endl;
+	}
 
 
 
