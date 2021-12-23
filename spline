@@ -1,0 +1,106 @@
+
+
+#include "math.h"
+
+#include <iostream>
+
+using namespace std;
+
+double fun(double x) {
+
+	return sin(4*x);
+
+}
+
+void main()
+{
+
+	setlocale(LC_ALL, "Russian");
+	bool flag = 1;
+	int i, j, n, i0;
+	double a[50], b[50], c[50], d[50], x[50], f[50], l[50];
+	double lyam[50], delt[50], x0, xn, xt, s, h;
+
+	cout << "Введите нижнюю границу : ";
+	cin >> x0;
+
+	cout << "Введите верхнюю границу : ";
+	cin >> xn;
+
+	cout << "Введите количество разбиений : ";
+	cin >> n;
+
+	h = (xn - x0) / n;
+
+	x[0] = x0;
+	f[0] = fun(x0);
+	x[n] = xn;
+	f[n] = fun(xn);
+
+	for (i = 1; i < n; i++) {
+		x[i] = x[i - 1] + h;
+		f[i] = fun(x[i]);
+
+	}
+
+	for (i = 1; i <= n; i++) {
+		l[i] = (f[i] - f[i - 1]) / h;
+
+	}
+
+	delt[1] = -0.25;
+	lyam[1] = 0.75 * (l[2] - l[1]) / h;
+
+	for (i = 3; i <= n; i++) {
+		delt[i - 1] = -1 / (4 + delt[i - 2]);
+		lyam[i - 1] = (3 * l[i] - 3 * l[i - 1] - h * lyam[i - 2]) / (4 * h + h * delt[i - 2]);
+
+	}
+
+	c[0] = 0;
+	c[n] = 0;
+
+	for (i = n; i >= 2; i--) {
+		c[i - 1] = delt[i - 1] * c[i] + lyam[i - 1];
+
+	}
+
+	for (i = 1; i <= n; i++) {
+		a[i] = f[i];
+		b[i] = l[i] + (2 * c[i] * h + h * c[i - 1]) / 3;
+		d[i] = (c[i] - c[i - 1]) / (3 * h);
+
+	}
+
+	while (flag) {
+
+		cout << "Введите точку : ";
+		cin >> xt;
+
+		if (xt < x0 || xt > xn) {
+			cout << "Вышли за границы!";
+			break;
+
+		}
+
+		for (i = 0; i <= n; i++) {
+			if (xt > x[i] && xt < x[i + 1]) i0 = i + 1;
+		}
+
+		for (i = 0; i <= n; i++) {
+			if (xt == x[i]) {
+				s = fun(xt);
+				goto l;
+			}
+
+		}
+
+		s = a[i0] + b[i0] * (xt - x[i0]) + c[i0] * (xt - x[i0]) * (xt - x[i0]) + d[i0] * (xt - x[i0]) * (xt - x[i0]) * (xt - x[i0]);
+
+	l:
+
+		cout << xt << " : " << s << " ( " << fabs(s - fun(xt)) << " ) " << endl;
+
+	}
+
+}
