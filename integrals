@@ -1,0 +1,137 @@
+#include "math.h"
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+double e = 1e-5;
+
+
+double foo(double x) {
+	return 2 * cos(x);//(3;7)
+	//return 1 / (1 + (x * x)); //(0;2)
+	//return exp(x);//(-1;1)
+	//return log10(x);//(1;6)
+}
+
+double IntegralTrap(double x1, double x2, double n) {
+	double sum = 0;
+	double x = x1;
+
+	double h = (x2 - x1) / n;
+	sum += foo(x) / 2 + foo(x2) / 2;
+	x += h;
+
+	while (x < x2) {
+		sum += foo(x);
+		x += h;
+	}
+	return sum * h;
+}
+
+double IntegralSimp(double x1, double x2, double n) {
+	double sum = 0;
+	double x = x1;
+	double h = (x2 - x1) / n;
+	x += h;
+
+	while (x < x2) {
+		sum += foo(x - h) + 4 * foo(x) + foo(x + h);
+		x += 2 * h;
+	}
+	return (sum * h) / 3;
+}
+
+double IntegralLevPryam(double x1, double x2, double n) {
+	double sum = 0;
+	double x = x1;
+	double h = (x2 - x1) / n;
+
+	while (x <= (x2 - h)) {
+		sum += foo((x + (x + h)) / 2) * (x + h - x);
+		x += h;
+	}
+	return sum;
+}
+
+double IntegralExp(double x1, double x2) {
+	return exp(x2) - exp(x1);
+}
+
+double IntegralCos(double x1, double x2) {
+	return 2 * sin(x2) - 2 * sin(x1);
+}
+
+void main()
+{
+	setlocale(LC_ALL, "Russian");
+
+	double x1, x2;
+	int N = 0;
+
+	cout << "Введите нижнюю границу : ";
+	cin >> x1;
+	cout << "Введите верхнюю границу : ";
+	cin >> x2;
+	cout << "Введите n : ";
+	cin >> N;
+
+	cout << endl;
+
+	double resLast = 0;
+	double resCurr = 0;
+	int n = N;
+
+	resLast = IntegralTrap(x1, x2, int(n / 2));
+	resCurr = IntegralTrap(x1, x2, n);
+	while (abs(resLast - resCurr) > e) {
+		n *= 2;
+		resLast = resCurr;
+		resCurr = IntegralTrap(x1, x2, n);
+	}
+	double r1 = resCurr;
+
+	cout << "Метод трапеции ";
+	cout << "n = " << n << " result: " << setprecision(12) << resCurr << endl;
+
+
+	resLast = 0;
+	resCurr = 0;
+	n = N;
+	resLast = IntegralSimp(x1, x2, int(n / 2));
+	resCurr = IntegralSimp(x1, x2, n);
+	while (abs(resLast - resCurr) > e) {
+		n *= 2;
+		resLast = resCurr;
+		resCurr = IntegralSimp(x1, x2, n);
+	}
+	double r2 = resCurr;
+	cout << "Метод Симпсона ";
+	cout << "n = " << n << " result: " << resCurr << endl;
+
+
+	resLast = 0;
+	resCurr = 0;
+	n = N;
+	resLast = IntegralLevPryam(x1, x2, int(n / 2));
+	resCurr = IntegralLevPryam(x1, x2, n);
+	while (abs(resLast - resCurr) > e) {
+		n *= 2;
+		resLast = resCurr;
+		resCurr = IntegralLevPryam(x1, x2, n);
+	}
+	double r3 = resCurr;
+	cout << "Метода средниего прямоугольника ";
+	cout << "n = " << n << " result: " << resCurr << endl;
+
+
+	double ist = IntegralCos(x1, x2);
+	cout << endl;
+
+	cout << "Значение интеграла: " << IntegralCos(x1, x2) << endl;
+	cout << endl;
+	cout << "Погрешность метода трапеции: " << abs(ist - r1) << endl;
+	cout << "Погрешность метода Симпсона: " << abs(ist - r2) << endl;
+	cout << "Погрешность метода средними прямоугольниками: " << abs(ist - r3) << endl << endl;
+
+	system("pause");
+}
